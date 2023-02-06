@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfBwDemo"
         mc:Ignorable="d"
+        Loaded="Window_Loaded"
         Title="MainWindow" Height="300" Width="300" WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.ColumnDefinitions>

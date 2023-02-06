@@ -14,6 +14,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using GlobalHook.Core.Keyboard;
+using GlobalHook.Core.Windows.Keyboard;
 
 namespace WpfBwDemo
 {
@@ -22,7 +24,9 @@ namespace WpfBwDemo
     /// </summary>
     public partial class MainWindow : Window
     {
-        private BackgroundWorker worker;
+        private readonly BackgroundWorker worker;
+
+        private readonly IKeyboardHook keyboardHook;
 
         public MainWindow()
         {
@@ -34,6 +38,19 @@ namespace WpfBwDemo
             worker.DoWork += Worker_DoWork;
             worker.RunWorkerCompleted += Worker_RunWorkerCompleted;
             worker.ProgressChanged += Worker_ProgressChanged;
+
+            keyboardHook = new KeyboardHook();
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            keyboardHook.Install();
+            keyboardHook.KeyDown += KeyboardHook_KeyDown;
+        }
+
+        private void KeyboardHook_KeyDown(object? sender, IKeyboardEventArgs e)
+        {
+            Dispatcher.Invoke(() => LogMessage($"Key down {e.Key}. Are we active? {this.IsActive}"));
         }
 
         private void Worker_DoWork(object? sender, DoWorkEventArgs e)
